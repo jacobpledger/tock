@@ -74,6 +74,23 @@ def collect_args(config: ConfigParser) -> argparse.Namespace:
         help="Tells Tock to fill in entries on weekends as well as weekdays.",
     )
 
+
+    # Stat Holiday Project
+    parser.add_argument(
+        "--holiday_project_name",
+        type=str,
+        required=False,
+        help="The project name under which statutory holidays are stored, if tracked.",
+    )
+
+    # Stat Holiday Task
+    parser.add_argument(
+        "--holiday_task_name",
+        type=str,
+        required=False,
+        help="The task name under which statutory holidays are stored, if tracked.",
+    )
+
     # Per-run Parameters
     # ------------------
 
