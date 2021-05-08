@@ -172,9 +172,9 @@ if __name__ == "__main__":
         days = [day for day in days if day.isoweekday() < 6]
 
     # Get which days are holidays.
-    local_holidays = getattr(holidays, config.get(section="USER", option="country"))(
-        prov=config.get(section="USER", option="province", fallback=None),
-        state=config.get(section="USER", option="state", fallback=None),
+    local_holidays = getattr(holidays, config.get(section="USER", option="Country"))(
+        prov=config.get(section="USER", option="Province", fallback=None),
+        state=config.get(section="USER", option="State", fallback=None),
     )
 
     # Check if we cross a holiday, and log appropriately.
