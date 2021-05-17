@@ -1,19 +1,13 @@
 from dataclasses import asdict, dataclass
-from datetime import date
+from datetime import date, datetime
 from typing import Any, Dict
-
-from tock.tick.serializable import Serializable
 
 
 @dataclass
-class TickEntry(Serializable):
-
-    __slots__ = ["date", "hours", "notes", "task_id", "user_id"]
-
-    date: date
-    hours: float
-    notes: str
-    task_id: int
+class Serializable:
+    """
+    NOTE: Subclasses of Serializable must also be dataclasses.
+    """
 
     def serialize(self) -> Dict[Any, Any]:
         serialized_data = {}
@@ -21,5 +15,7 @@ class TickEntry(Serializable):
             if v:
                 if isinstance(v, date):
                     v = v.strftime("%Y-%m-%d")
+                if isinstance(v, datetime):
+                    v = v.strftime("%Y-%m-%dT%H:%M:%S")
                 serialized_data.update({k: v})
         return serialized_data
