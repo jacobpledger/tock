@@ -7,25 +7,40 @@ class InvalidTockConfigException(Exception):
     pass
 
 
+class MissingTockConfigException(Exception):
+    pass
+
+
 class TockConfig(ConfigParser):
 
-    config_filename = os.environ.get("TOCK_CONFIG", "./config.ini")
+    default_section = "DEFAULT"
+    user_section = "USER"
+    cache_section = "CACHE"
+
+    config_path = os.environ.get(
+        "TOCK_CONFIG",
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
+    )
 
     def __init__(self):
         super().__init__(allow_no_value=True)
         self.required_arguments = ["Token", "Email", "SubscriptionId"]
-        self.read(self.config_filename)
-        if not self.has_section("USER"):
-            self.add_section("USER")
-        if not self.has_section("CACHE"):
-            self.add_section("CACHE")
+
+        if not os.path.isfile(self.config_path):
+            raise MissingTockConfigException("Cannot read configuration file!")
+
+        self.read(self.config_path)
+        if not self.has_section(self.user_section):
+            self.add_section(self.user_section)
+        if not self.has_section(self.cache_section):
+            self.add_section(self.cache_section)
 
     def set_user_configs(self, args: argparse.Namespace) -> None:
 
         # Weekends
         if args.include_weekends:
             self.set(
-                section="USER",
+                section=self.user_section,
                 option="IncludeWeekends",
                 value=str(args.include_weekends),
             )
@@ -33,33 +48,33 @@ class TockConfig(ConfigParser):
         # Holidays
         if args.holiday_project_name:
             self.set(
-                section="USER",
+                section=self.user_section,
                 option="HolidayProjectName",
                 value=args.holiday_project_name,
             )
         if args.holiday_task_name:
             self.set(
-                section="USER", option="HolidayTaskName", value=args.holiday_task_name
+                section=self.user_section, option="HolidayTaskName", value=args.holiday_task_name
             )
         if args.country:
-            self.set(section="USER", option="Country", value=args.country)
+            self.set(section=self.user_section, option="Country", value=args.country)
         if args.state:
-            self.set(section="USER", option="State", value=args.state)
+            self.set(section=self.user_section, option="State", value=args.state)
         if args.province:
-            self.set(section="USER", option="Province", value=args.province)
+            self.set(section=self.user_section, option="Province", value=args.province)
 
         # Required
         if args.subscription_id:
             self.set(
-                section="USER", option="SubscriptionId", value=str(args.subscription_id)
+                section=self.user_section, option="SubscriptionId", value=str(args.subscription_id)
             )
         if args.token:
-            self.set(section="USER", option="Token", value=args.token)
+            self.set(section=self.user_section, option="Token", value=args.token)
         if args.email:
-            self.set(section="USER", option="Email", value=args.email)
+            self.set(section=self.user_section, option="Email", value=args.email)
 
     def export(self):
-        with open(self.config_filename, "w") as f:
+        with open(self.config_path, "w") as f:
             self.write(f)
 
     def is_valid(self):
@@ -73,7 +88,7 @@ class TockConfig(ConfigParser):
     def validate(self):
         missing_arguments = []
         for argument in self.required_arguments:
-            if not self.get(section="USER", option=argument, fallback=None):
+            if not self.get(section=self.user_section, option=argument, fallback=None):
                 missing_arguments.append(argument)
         if any(missing_arguments):
             raise InvalidTockConfigException(
