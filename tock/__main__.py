@@ -74,7 +74,6 @@ def collect_args(config: ConfigParser) -> argparse.Namespace:
         help="Tells Tock to fill in entries on weekends as well as weekdays.",
     )
 
-
     # Stat Holiday Project
     parser.add_argument(
         "--holiday_project_name",
@@ -137,7 +136,6 @@ def collect_args(config: ConfigParser) -> argparse.Namespace:
         help="The date you want to backfill TO.",
     )
 
-
     # Hours
     parser.add_argument(
         "--hours",
@@ -153,7 +151,6 @@ def collect_args(config: ConfigParser) -> argparse.Namespace:
         action="store_true",
         help="If provided, Tock will ask you to confirm each entry.",
     )
-
 
     args = parser.parse_args()
     return args

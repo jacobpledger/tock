@@ -22,7 +22,6 @@ class TockConfig(ConfigParser):
 
     def set_user_configs(self, args: argparse.Namespace) -> None:
 
-
         # Weekends
         if args.include_weekends:
             self.set(
