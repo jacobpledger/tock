@@ -238,4 +238,3 @@ if __name__ == "__main__":
         else:
             response = client.create_entry(entry=entry)
         print(response)
-        print(response.json())
