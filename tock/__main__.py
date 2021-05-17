@@ -10,6 +10,7 @@ import holidays
 
 from tock.config import TockConfig
 from tock.tick.client import TickClient
+from tock.tick.entry import TickEntry
 
 
 def collect_args(config: ConfigParser) -> argparse.Namespace:
@@ -211,19 +212,19 @@ if __name__ == "__main__":
 
     for day in days:
         if day in local_holidays:
-            entry = {
-                "date": day.strftime("%Y-%m-%d"),
-                "hours": 8.0,
-                "notes": config.get(section="USER", option="HolidayNotes"),
-                "task_id": config.get(section="CACHE", option="HolidayTaskId"),
-            }
+            entry = TickEntry(
+                date=day,
+                hours=8.0,
+                notes=config.get(section="USER", option="HolidayNotes"),
+                task_id=int(config.get(section="CACHE", option="HolidayTaskId")),
+            )
         else:
-            entry = {
-                "date": day.strftime("%Y-%m-%d"),
-                "hours": args.hours,
-                "notes": args.notes,
-                "task_id": task["id"],
-            }
+            entry = TickEntry(
+                date=day,
+                hours=args.hours,
+                notes=args.notes,
+                task_id=task["id"],
+            )
 
         if args.interactive:
             print(
