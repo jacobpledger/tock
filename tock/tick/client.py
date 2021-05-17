@@ -45,9 +45,7 @@ class TickClient(object):
         return json.loads(content.decode("utf-8"))
 
     def get_projects(self) -> List[Dict]:
-        return self._get_items(
-            url=self._base_url + "/projects.json"
-        )
+        return self._get_items(url=self._base_url + "/projects.json")
 
     def get_project_by_id(self, id_: int) -> List[Dict]:
         return self._get_items(
@@ -64,18 +62,16 @@ class TickClient(object):
         if project is not None:
             project = self._get_items(url=f"{project['url']}")
         else:
-            raise ProjectNotFoundException(f"Project \"{name}\" not found! Options were:\n{project_names}.")
+            raise ProjectNotFoundException(
+                f'Project "{name}" not found! Options were:\n{project_names}.'
+            )
         return project
 
     def get_tasks(self) -> List[Dict]:
-        return self._get_items(
-            url=f"{self._base_url}tasks.json"
-        )
+        return self._get_items(url=f"{self._base_url}tasks.json")
 
     def get_project_tasks(self, project_id: int) -> List[Dict]:
-        return self._get_items(
-            url=f"{self._base_url}projects/{project_id}/tasks.json"
-        )
+        return self._get_items(url=f"{self._base_url}projects/{project_id}/tasks.json")
 
     def get_project_task_by_name(self, project_id: int, name: str) -> Optional[Dict]:
         task = None
@@ -87,11 +83,12 @@ class TickClient(object):
         if task is not None:
             task = self._get_items(f"{task['url']}")
         else:
-            raise TaskNotFoundException(f"Task \"{name}\" not found! Options were:\n{task_names}")
+            raise TaskNotFoundException(
+                f'Task "{name}" not found! Options were:\n{task_names}'
+            )
         return task
 
     def create_entry(self, entry: TickEntry):
         return self._post_items(
-            url=f"{self._base_url}entries.json",
-            data=json.dumps(entry.serialize())
+            url=f"{self._base_url}entries.json", data=json.dumps(entry.serialize())
         )

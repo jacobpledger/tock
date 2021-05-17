@@ -19,7 +19,7 @@ class TockConfig(ConfigParser):
 
     config_path = os.environ.get(
         "TOCK_CONFIG",
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.ini"),
     )
 
     def __init__(self):
@@ -54,7 +54,9 @@ class TockConfig(ConfigParser):
             )
         if args.holiday_task_name:
             self.set(
-                section=self.user_section, option="HolidayTaskName", value=args.holiday_task_name
+                section=self.user_section,
+                option="HolidayTaskName",
+                value=args.holiday_task_name,
             )
         if args.country:
             self.set(section=self.user_section, option="Country", value=args.country)
@@ -66,7 +68,9 @@ class TockConfig(ConfigParser):
         # Required
         if args.subscription_id:
             self.set(
-                section=self.user_section, option="SubscriptionId", value=str(args.subscription_id)
+                section=self.user_section,
+                option="SubscriptionId",
+                value=str(args.subscription_id),
             )
         if args.token:
             self.set(section=self.user_section, option="Token", value=args.token)
