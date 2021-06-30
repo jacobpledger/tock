@@ -183,7 +183,7 @@ if __name__ == "__main__":
     days = list(
         rrule(DAILY, dtstart=start_date).between(start_date, end_date, inc=True)
     )
-    if not bool(config.get(section="USER", option="IncludeWeekends")):
+    if not config.getboolean(section="USER", option="IncludeWeekends"):
         days = [day for day in days if day.isoweekday() < 6]
 
     # Get which days are holidays.
